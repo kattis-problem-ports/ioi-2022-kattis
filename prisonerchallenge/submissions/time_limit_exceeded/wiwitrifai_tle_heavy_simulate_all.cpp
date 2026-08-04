@@ -1,3 +1,21 @@
+// std::random_shuffle was removed in C++17. libstdc++ still declares it from
+// <bits/stdc++.h> while _GLIBCXX_USE_DEPRECATED is on, which is the only reason
+// this solution compiles at -std=gnu++20 today; it fails as soon as that goes.
+// The shim keeps the algorithm and every call site intact; only the source of
+// randomness differs from whatever rand() gave in 2022. It is declared in
+// namespace std so that both spellings the official sources use --
+// random_shuffle(...) and std::random_shuffle(...) -- still resolve after the
+// macro rewrites the name. <algorithm> is included before the #define so that
+// the macro never rewrites libstdc++'s own declarations.
+#include <algorithm>
+#include <random>
+namespace std {
+static std::mt19937 _compat_rng(20220808);
+template <class It>
+void _compat_random_shuffle(It first, It last) { shuffle(first, last, _compat_rng); }
+}  // namespace std
+#define random_shuffle _compat_random_shuffle
+
 // similar to wiwitrifai-partial-heavy.cpp, but also simulate for all (A, B)
 
 #include "prison.h"

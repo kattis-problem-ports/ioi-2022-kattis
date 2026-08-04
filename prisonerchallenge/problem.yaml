@@ -11,6 +11,9 @@ limits:
   # 1s is what makes the intended-too-slow wiwitrifai_tle_heavy_simulate_all
   # actually time out (it needs 1.37s).
   time_multiplier: 3
+  # The original contest limit was 2 GiB (every upstream run_cpp.sh sets
+  # "ulimit -v 2097152"); Kattis' default would be 1024 MB.
+  memory: 2048
 
 grading:
   show_test_data_groups: true

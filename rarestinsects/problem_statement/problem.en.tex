@@ -1,7 +1,7 @@
 \problemname{Rarest Insects}
 
 \begin{quote}
-\textit{Note:} this problem is only solvable in C++.
+\textit{Note:} in this problem, you have to write your solution in C++.
 \end{quote}
 
 There are $N$ insects, indexed from $0$ to $N-1$, running around Pak Blangkon's house. Each insect has
@@ -125,7 +125,7 @@ Let $q$ be the maximum of the following three values: the number of calls to
 In group $3$ you can obtain a partial score. Let $m$ be the maximum value of $\frac{q}{N}$ across all
 test cases in that group. Your score for group $3$ is calculated according to the following table:
 
-\noindent
+\begin{center}
 \begin{tabular}{| l | l |}
   \hline
   \textbf{Condition} & \textbf{Points} \\ \hline
@@ -134,8 +134,8 @@ test cases in that group. Your score for group $3$ is calculated according to th
   $3 < m \leq 6$    & $81 - \frac{2}{3} m^2$ \\ \hline
   $m \leq 3$        & $75$ \\ \hline
 \end{tabular}
+\end{center}
 
-\medskip
 \noindent
 Points are rounded to two decimals.
 
@@ -165,16 +165,17 @@ Otherwise, the output of the sample grader is in the following format:
 \end{itemize}
 
 The sample grader runs the machine inside your own process; the judge runs it as a separate program.
-The sample interaction below shows that exchange for the sample scenario: the numbers the judge sends
-back are the return values of \texttt{press\_button}.
+
+That is the format of the sample data below. The sample output is what the sample grader prints for
+the sequence of calls in the table below; since $q$ counts \emph{your} calls, the second line will
+differ for a solution that queries the machine differently.
 
 \section*{Explanation of Sample}
 The sample is a scenario in which there are $6$ insects of types $[5, 8, 9, 5, 9, 9]$ respectively.
 The procedure \texttt{min\_cardinality} is called with $N = 6$, and may call \texttt{move\_inside},
 \texttt{move\_outside} and \texttt{press\_button} as follows:
 
-\medskip
-\noindent
+\begin{center}
 \begin{tabular}{| l | l | l | l |}
   \hline
   \textbf{Call} & \textbf{Return value} & \textbf{Insects in the machine} &
@@ -195,8 +196,8 @@ The procedure \texttt{min\_cardinality} is called with $N = 6$, and may call \te
   \texttt{move\_outside(5)} &     & $\{0, 1, 2, 3, 4\}$ & $[5, 8, 9, 5, 9]$ \\ \hline
   \texttt{press\_button()}  & $2$ & $\{0, 1, 2, 3, 4\}$ & $[5, 8, 9, 5, 9]$ \\ \hline
 \end{tabular}
+\end{center}
 
-\medskip
 \noindent
 At this point, there is sufficient information to conclude that the cardinality of the rarest insect
 type is $1$. Therefore, \texttt{min\_cardinality} should return $1$.

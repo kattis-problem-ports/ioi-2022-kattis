@@ -10,6 +10,16 @@ limits:
   # Slowest AC is 0.11s, so any multiplier up to 9 lands on Kattis' 1s floor,
   # which is also the original contest limit.
   time_multiplier: 3
+  # The original contest limit was 2 GiB (every upstream run_cpp.sh sets
+  # "ulimit -v 2097152"); Kattis' default would be 1024 MB.
+  memory: 2048
+  # include/cpp/grader.cpp truncates a journey of more than 2*10^6 sailings to
+  # empty, as upstream did, so the printed answer is bounded. The bound is still
+  # above Kattis' 8 MB default: 2*10^6 canoe indices at M <= 2*10^5 are six
+  # digits each, about 13.4 MiB, and that is an answer the statement awards full
+  # marks. The original returned the journey in-process and had no output limit
+  # at all, so this exists only to keep the port from inventing an OLE.
+  output: 32
 
 grading:
   show_test_data_groups: true

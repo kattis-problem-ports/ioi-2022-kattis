@@ -16,6 +16,9 @@ limits:
   # limit of 2s, which is the point, since the round-trips are the port's own
   # overhead and should not eat a contestant's budget.
   time_multiplier: 3
+  # The original contest limit was 2 GiB (every upstream run_cpp.sh sets
+  # "ulimit -v 2097152"); Kattis' default would be 1024 MB.
+  memory: 2048
 
 grading:
   show_test_data_groups: true

@@ -1,14 +1,17 @@
-// std::random_shuffle was removed in C++17 and libstdc++ only still declares it
-// as a deprecated extension, so this solution does not compile at -std=gnu++20.
-// The shim keeps the algorithm intact with a deterministically seeded generator;
-// only the source of randomness differs from whatever rand() gave in 2022.
-// <algorithm> is included before the #define so that the macro never rewrites
-// libstdc++'s own declaration.
+// std::random_shuffle was removed in C++17 and libstdc++ no longer declares it,
+// so this solution does not compile at -std=gnu++20. The shim keeps the algorithm
+// and every call site intact; only the source of randomness differs from whatever
+// rand() gave in 2022. It is declared in namespace std so that both spellings the
+// official sources use -- random_shuffle(...) and std::random_shuffle(...) --
+// still resolve after the macro rewrites the name. <algorithm> is included before
+// the #define so that the macro never rewrites libstdc++'s own declarations.
 #include <algorithm>
 #include <random>
+namespace std {
 static std::mt19937 _compat_rng(20220808);
 template <class It>
-void _compat_random_shuffle(It first, It last) { std::shuffle(first, last, _compat_rng); }
+void _compat_random_shuffle(It first, It last) { shuffle(first, last, _compat_rng); }
+}  // namespace std
 #define random_shuffle _compat_random_shuffle
 
 // Incorrect attempt of O(N) with Monte Carlo

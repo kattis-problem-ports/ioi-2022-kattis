@@ -10,6 +10,9 @@ limits:
   # time near the boundary -- the intended-too-slow ones run out of memory
   # instead -- so there is no strong signal and this is the default.
   time_multiplier: 3
+  # The original contest limit was 2 GiB (every upstream run_cpp.sh sets
+  # "ulimit -v 2097152"); Kattis' default would be 1024 MB.
+  memory: 2048
 
 grading:
   show_test_data_groups: true

@@ -1,7 +1,7 @@
 \problemname{Digital Circuit}
 
 \begin{quote}
-\textit{Note:} this problem is only solvable in C++.
+\textit{Note:} in this problem, you have to write your solution in C++.
 \end{quote}
 
 There is a circuit, which consists of $N + M$ gates numbered from $0$ to $N + M - 1$. Gates $0$ to
@@ -136,12 +136,24 @@ try your solution locally. It reads the input in the following format:
   \item line $3$: $A[0]$ $A[1]$ $\ldots$ $A[M-1]$
   \item line $4 + k$ ($0 \leq k \leq Q-1$): $L$ $R$ for update $k$
 \end{itemize}
-and prints the $Q$ return values of \texttt{count\_ways}, one per line.
-
-The sample interaction below shows the same data as the judge sends it: lines the judge sends to your
-program and the answers your program sends back, in the order they are exchanged.
+and prints the $Q$ return values of \texttt{count\_ways}, one per line. That is the format of the
+sample data below.
 
 \section*{Explanation of Sample}
+The sample data corresponds to the following sequence of calls:
+
+\begin{center}
+\begin{tabular}{| l | l |}
+  \hline
+  \textbf{Call} & \textbf{Return value} \\ \hline
+  \texttt{init(3, 4, [-1, 0, 1, 2, 1, 1, 0], [1, 0, 1, 0])} & \\ \hline
+  \texttt{count\_ways(3, 4)} & $2$ \\ \hline
+  \texttt{count\_ways(4, 5)} & $0$ \\ \hline
+  \texttt{count\_ways(3, 6)} & $6$ \\ \hline
+\end{tabular}
+\end{center}
+
+\noindent
 The sample is the circuit illustrated above, with $P = [-1, 0, 1, 2, 1, 1, 0]$ and
 $A = [1, 0, 1, 0]$.
 

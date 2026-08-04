@@ -1,91 +1,105 @@
 // Sample grader for "Rarest Insects" (IOI 2022).
 //
-// Compile it together with your own solution, for example
+// This is the official IOI 2022 sample grader, copied verbatim. Compile it
+// together with your own solution, for example
 //     g++ -O2 -std=gnu++20 -o solution sample_grader.cpp solution.cpp
 // and run it on an input file:
 //     ./solution < insects_sample.in
 //
-// The input format is
-//     line 1: N
-//     line 2: T[0] T[1] ... T[N-1]
-// where T[i] is the type of insect i. The grader prints the return value of
-// min_cardinality on the first line and q -- the largest of the three call
-// counts -- on the second. If your solution breaks the rules it prints
-// "Protocol Violation: <MSG>" instead, where <MSG> is "invalid parameter" or
-// "too many calls".
-//
-// This grader runs the machine inside your own process. The judge runs it as a
-// separate program, and its verdict is the one that counts.
+// It reads N and the N insect types, runs the machine inside your own process,
+// and prints the return value of min_cardinality followed by q. The judge runs
+// the machine as a separate program, and its verdict is the one that counts.
+// See the Sample Grader section of the statement.
 #include "insects.h"
 
+#include <cassert>
 #include <cstdio>
-#include <cstdlib>
+
+#include <algorithm>
 #include <map>
+#include <set>
+#include <string>
 #include <vector>
 
-static const int MAX_CALLS = 40000;
+static inline constexpr int kMaxQueries = 40000;
 
-static int n;
-static std::vector<int> colour;   // insect -> compressed type
-static std::vector<char> inside;
-static std::vector<int> occ;      // compressed type -> how many are inside
-static int calls[3];              // move_inside, move_outside, press_button
+static int N;
+// Insect types are compressed to colors in the range [0, N).
+static std::vector<int> color;
+static std::vector<bool> in_box;
 
-[[noreturn]] static void violation(const char *msg) {
-  printf("Protocol Violation: %s\n", msg);
+static std::vector<int> color_occurrences;
+static std::multiset<int> max_occurrences;
+
+static std::vector<int> op_counter(3, 0);
+
+static inline void protocol_violation(std::string message) {
+  printf("Protocol Violation: %s\n", message.c_str());
   exit(0);
 }
 
-static void count_call(int which) {
-  if (++calls[which] > MAX_CALLS) violation("too many calls");
-}
-
 void move_inside(int i) {
-  count_call(0);
-  if (i < 0 || i >= n) violation("invalid parameter");
-  if (!inside[i]) {
-    inside[i] = 1;
-    occ[colour[i]]++;
+  if (i < 0 || i >= N) {
+    protocol_violation("invalid parameter");
+  }
+  ++op_counter[0];
+  if (op_counter[0] > kMaxQueries) {
+    protocol_violation("too many calls");
+  }
+  if (!in_box[i]) {
+    in_box[i] = true;
+    max_occurrences.erase(max_occurrences.find(color_occurrences[color[i]]));
+    ++color_occurrences[color[i]];
+    max_occurrences.insert(color_occurrences[color[i]]);
   }
 }
 
 void move_outside(int i) {
-  count_call(1);
-  if (i < 0 || i >= n) violation("invalid parameter");
-  if (inside[i]) {
-    inside[i] = 0;
-    occ[colour[i]]--;
+  if (i < 0 || i >= N) {
+    protocol_violation("invalid parameter");
+  }
+  ++op_counter[1];
+  if (op_counter[1] > kMaxQueries) {
+    protocol_violation("too many calls");
+  }
+  if (in_box[i]) {
+    in_box[i] = false;
+    max_occurrences.erase(max_occurrences.find(color_occurrences[color[i]]));
+    --color_occurrences[color[i]];
+    max_occurrences.insert(color_occurrences[color[i]]);
   }
 }
 
 int press_button() {
-  count_call(2);
-  int best = 0;
-  for (int c : occ) {
-    if (c > best) best = c;
+  ++op_counter[2];
+  if (op_counter[2] > kMaxQueries) {
+    protocol_violation("too many calls");
   }
-  return best;
+  return *(max_occurrences.rbegin());
 }
 
 int main() {
-  if (scanf("%d", &n) != 1) return 1;
-  std::map<int, int> ids;
-  colour.assign(n, 0);
-  for (int i = 0; i < n; ++i) {
-    int t;
-    if (scanf("%d", &t) != 1) return 1;
-    std::map<int, int>::iterator it = ids.find(t);
-    if (it == ids.end()) it = ids.emplace(t, static_cast<int>(ids.size())).first;
-    colour[i] = it->second;
+  assert(1 == scanf("%d", &N));
+  color.resize(N);
+  in_box.assign(N, false);
+
+  std::map<int, int> type_to_color;
+  for (int i = 0; i < N; ++i) {
+    int Ti;
+    assert(1 == scanf("%d", &Ti));
+    if (type_to_color.find(Ti) == type_to_color.end()) {
+      int new_color = type_to_color.size();
+      type_to_color[Ti] = new_color;
+      max_occurrences.insert(0);
+    }
+    color[i] = type_to_color[Ti];
   }
-  inside.assign(n, 0);
-  occ.assign(ids.size(), 0);
 
-  int answer = min_cardinality(n);
+  color_occurrences.assign(type_to_color.size(), 0);
 
-  int q = calls[0];
-  if (calls[1] > q) q = calls[1];
-  if (calls[2] > q) q = calls[2];
-  printf("%d\n%d\n", answer, q);
+  int answer = min_cardinality(N);
+  int Q = *std::max_element(op_counter.begin(), op_counter.end());
+  printf("%d\n", answer);
+  printf("%d\n", Q);
   return 0;
 }

@@ -19,7 +19,14 @@ int main() {
   if (result.index() == 0) {
     printf("0\n%d\n", std::get<bool>(result) ? 1 : 0);
   } else {
-    const std::vector<int> &c = std::get<std::vector<int>>(result);
+    std::vector<int> &c = std::get<std::vector<int>>(result);
+    // An array of more than 2*10^6 integers earns the partial score whatever it
+    // contains, so the official grader replaced it with an empty array instead
+    // of printing it (in a SECRET block, which is why the attachment does not
+    // have this). Keeping it here bounds the output at 2*10^6 indices: the judge
+    // sees an array that does not describe a valid journey either way, and a
+    // submission cannot lose the partial score to an output-limit failure.
+    if (c.size() > 2000000) c.clear();
     printf("1\n%d\n", static_cast<int>(c.size()));
     for (size_t i = 0; i < c.size(); ++i) {
       printf("%d%c", c[i], i + 1 == c.size() ? '\n' : ' ');

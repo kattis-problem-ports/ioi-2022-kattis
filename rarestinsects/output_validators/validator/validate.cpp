@@ -2,18 +2,28 @@
 
 // Interactive output validator for IOI 2022 "insects" (Rarest Insects).
 //
-// Judge input file: N on the first line, then the N insect types.
+// Judge input file:  N on the first line, then the N insect types.
+// Judge answer file: the word "partial" if this case is scored by its operation
+//   count (the original package's is_partial=1), anything else if it is not.
+//   See data/generator.sh; the only case whose answer file is not one of the two
+//   flags is the sample, which is is_partial=0 and reads correctly as "not
+//   partial".
 //
 // Protocol (see the statement):
 //   validator -> submission : N
 //   submission -> validator : "I i" | "O i" | "P" | "A c"
 //   validator -> submission : the answer to each "P"
 //
-// Each of "I", "O" and "P" may be used at most 40000 times. With the "partial"
-// flag the run is scored by the statement's table for test group 3, using
-// m = Q / N where Q is the largest of the three operation counts. The fraction
-// is delivered through accept_with_score, which the patched data/gen.sh turns
-// into a multiplier on the group score.
+// Each of "I", "O" and "P" may be used at most 40000 times. The run is scored by
+// the statement's table for test group 3 -- using m = Q / N, where Q is the
+// largest of the three operation counts -- when the group passes the "partial"
+// flag *and* the case is flagged in the judge answer. Both are needed because
+// is_partial was a property of the case rather than of the subtask: the original
+// ran the file this port calls 1-01 unscored in subtasks 1, 2 and 3 and ran its
+// byte-identical twin 3-01 scored in subtask 3, and deduplicating them leaves one
+// file that group 3 must score and groups 1 and 2 must not. The fraction is
+// delivered through accept_with_score, which the patched data/gen.sh turns into a
+// multiplier on the group score.
 
 #include <csignal>
 #include <algorithm>
@@ -55,9 +65,16 @@ int main(int argc, char** argv) {
     // If the submission dies early, keep running so a verdict can be reported.
     signal(SIGPIPE, SIG_IGN);
 
-    bool partial_scoring = false;
+    bool partial_group = false;
     for (int i = 4; i < argc; i++)
-        if (string(argv[i]) == "partial") partial_scoring = true;
+        if (string(argv[i]) == "partial") partial_group = true;
+
+    // The judge answer holds the original package's is_partial flag for this
+    // case. It is a property of the case, not of the group, so the score table
+    // needs both it and the group's flag; see the note at the top of the file.
+    string case_flag;
+    judge_ans >> case_flag;
+    const bool partial_scoring = partial_group && case_flag == "partial";
 
     int n;
     if (!(judge_in >> n)) judge_error("could not read N from the judge input");

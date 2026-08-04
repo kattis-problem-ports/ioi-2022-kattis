@@ -1,7 +1,7 @@
 \problemname{Prisoner Challenge}
 
 \begin{quote}
-\textit{Note:} this problem is only solvable in C++.
+\textit{Note:} in this problem, you have to write your solution in C++.
 \end{quote}
 
 In a prison, there are $500$ prisoners. One day, the warden offers them a chance to free themselves.
@@ -120,7 +120,7 @@ $0$.
 In group $3$ you can obtain a partial score. Let $m$ be the largest value of $x$ that you print over
 all test cases in that group. Your score for group $3$ is calculated according to the following table:
 
-\noindent
+\begin{center}
 \begin{tabular}{| l | l |}
   \hline
   \textbf{Condition} & \textbf{Points} \\ \hline
@@ -133,17 +133,58 @@ all test cases in that group. Your score for group $3$ is calculated according t
   $m = 21$               & $80$ \\ \hline
   $m \leq 20$            & $90$ \\ \hline
 \end{tabular}
+\end{center}
 
-\section*{Sample Grader}
-A sample grader is available under ``attachments'' at the bottom of this page, together with
-\texttt{prison.h} and the sample input. Compile it with your solution and run it on an input file to
-try your solution locally. It reads a single line containing $N$, and prints
+\section*{Sample Data}
+The sample data below is what the judge does: it hands your submission a single line containing $N$,
+and the grader it is compiled with prints
 \begin{itemize}
   \item line $1$: $x$
   \item line $2 + i$ ($0 \leq i \leq x$): $s[i][0]$ $s[i][1]$ $\ldots$ $s[i][N]$
 \end{itemize}
-That is the format of the sample data below. The sample grader does not check whether your strategy
-wins the challenge; the judge does that.
+Any strategy that wins the challenge is accepted, so the sample output is only one of many correct
+answers.
+
+\section*{Sample Grader}
+A sample grader is available under ``attachments'' at the bottom of this page, together with
+\texttt{prison.h} and a sample input for it. Unlike the judge, it lets you try your strategy on
+scenarios of your own choosing. It reads
+\begin{itemize}
+  \item line $1$: $N$
+  \item line $2 + k$ ($0 \leq k$): $A[k]$ $B[k]$
+  \item last line: $-1$
+\end{itemize}
+Each line except the first and the last one represents a scenario: in scenario $k$ bag A contains
+$A[k]$ coins and bag B contains $B[k]$ coins.
+
+The sample grader first calls \texttt{devise\_strategy(N)}. If the returned array does not conform to
+the constraints described in Implementation Details, it prints one of the following error messages and
+exits:
+\begin{itemize}
+  \item \texttt{s is an empty array}: $s$ is an empty array (which does not represent a valid
+  strategy).
+  \item \texttt{s[i] contains incorrect length}: there exists an index $i$ ($0 \leq i \leq x$) such
+  that the length of $s[i]$ is not $N+1$.
+  \item \texttt{First element of s[i] is non-binary}: there exists an index $i$
+  ($0 \leq i \leq x$) such that $s[i][0]$ is neither $0$ nor $1$.
+  \item \texttt{s[i][j] contains incorrect value}: there exist indices $i, j$
+  ($0 \leq i \leq x$, $1 \leq j \leq N$) such that $s[i][j]$ is not between $-2$ and $x$.
+\end{itemize}
+
+Otherwise it produces two outputs. First, it prints
+\begin{itemize}
+  \item line $1 + k$ ($0 \leq k$): the output of your strategy for scenario $k$ --- the character
+  \texttt{A} if applying the strategy leads to a prisoner identifying bag A as the one with fewer
+  coins, \texttt{B} if it leads to a prisoner identifying bag B, and \texttt{X} if it does not lead to
+  any prisoner identifying a bag.
+\end{itemize}
+Second, it writes a file \texttt{log.txt} in the current directory in the following format:
+\begin{itemize}
+  \item line $1 + k$ ($0 \leq k$): $w[k][0]$ $w[k][1]$ $\ldots$
+\end{itemize}
+The sequence on line $1 + k$ corresponds to scenario $k$ and describes the numbers written on the
+whiteboard. Specifically, $w[k][l]$ is the number written by the $(l+1)^{\text{th}}$ prisoner to enter
+the room.
 
 \section*{Explanation of Sample}
 The sample has $N = 3$. Let $v$ denote the number the prisoner reads from the whiteboard upon entering

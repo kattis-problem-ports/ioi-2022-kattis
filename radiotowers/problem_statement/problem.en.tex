@@ -1,7 +1,7 @@
 \problemname{Radio Towers}
 
 \begin{quote}
-\textit{Note:} this problem is only solvable in C++.
+\textit{Note:} in this problem, you have to write your solution in C++.
 \end{quote}
 
 There are $N$ radio towers in Jakarta. The towers are located along a straight line and numbered
@@ -103,12 +103,24 @@ try your solution locally. It reads the input in the following format:
   \item line $2$: $H[0]$ $H[1]$ $\ldots$ $H[N-1]$
   \item line $3 + j$ ($0 \leq j \leq Q-1$): $L$ $R$ $D$ for question $j$
 \end{itemize}
-and prints the $Q$ return values of \texttt{max\_towers}, one per line.
-
-The sample interaction below shows the same data as the judge sends it: lines the judge sends to your
-program and the answers your program sends back, in the order they are exchanged.
+and prints the $Q$ return values of \texttt{max\_towers}, one per line. That is the format of the
+sample data below.
 
 \section*{Explanation of Sample}
+The sample data corresponds to the following sequence of calls:
+
+\begin{center}
+\begin{tabular}{| l | l |}
+  \hline
+  \textbf{Call} & \textbf{Return value} \\ \hline
+  \texttt{init(7, [10, 20, 60, 40, 50, 30, 70])} & \\ \hline
+  \texttt{max\_towers(1, 5, 10)}  & $3$ \\ \hline
+  \texttt{max\_towers(2, 2, 100)} & $1$ \\ \hline
+  \texttt{max\_towers(0, 6, 17)}  & $2$ \\ \hline
+\end{tabular}
+\end{center}
+
+\noindent
 In the sample, the heights are $H = [10, 20, 60, 40, 50, 30, 70]$.
 
 For question $0$, with $L = 1$, $R = 5$ and $D = 10$, Pak Dengklek can lease towers $1$, $3$ and $5$.
