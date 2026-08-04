@@ -14,6 +14,17 @@ limits:
   # The original contest limit was 2 GiB (every upstream run_cpp.sh sets
   # "ulimit -v 2097152"); Kattis' default would be 1024 MB.
   memory: 2048
+  # The output validator simulates every ordered pair (A, B), for the judge
+  # answer and for the submission, so its cost is O(N^2 x) per test case:
+  # 2 * 25M pairs * up to 61 steps at N = 5000 with the group-3 cap of x <= 60.
+  # That ceiling is reachable by a legal, accepted submission -- prefix any
+  # correct strategy with a chain of states that ignore what they see and write
+  # i + 1, and every pair pays the length of the chain (wiwitrifai_partial_heavy
+  # does this shape of padding on purpose). Measured: the model's x = 20 table
+  # padded out to x = 60 takes 7.9s on a laptop, against 0.2s for the shipped
+  # solutions. This states the 60s that would otherwise be an implicit default,
+  # so the 8x headroom is on the record rather than assumed.
+  validation_time: 60
 
 grading:
   show_test_data_groups: true
