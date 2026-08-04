@@ -1,0 +1,21 @@
+uuid: a0ef95a3-bf81-43cd-950c-1537be3ef8d1
+author: Kevin Luiz Ponte Pucci
+source: International Olympiad in Informatics (IOI) 2022, Day 1
+source_url: https://ioi2022.id/tasks/
+license: cc by-sa
+type: scoring
+# The questions are revealed one at a time by output_validators/validator, so
+# that max_towers cannot look ahead -- the same reason the original was a CMS
+# Communication task. See include/cpp/grader.cpp.
+validation: custom interactive
+
+limits:
+  # Slowest AC is 1.03s (log2n.cpp), up from 0.87s before this became
+  # interactive: 10^5 pipe round-trips per case that the original in-process
+  # manager did not pay for. That gives a 4s limit -- above the original contest
+  # limit of 2s, which is the point, since the round-trips are the port's own
+  # overhead and should not eat a contestant's budget.
+  time_multiplier: 3
+
+grading:
+  show_test_data_groups: true

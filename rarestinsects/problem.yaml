@@ -1,0 +1,16 @@
+uuid: 6744dadc-9ffa-4107-970b-285ed928b861
+author: Hazem Issa
+source: International Olympiad in Informatics (IOI) 2022, Day 2
+source_url: https://ioi2022.id/tasks/
+license: cc by-sa
+type: scoring
+validation: custom interactive score
+
+limits:
+  # Slowest AC is 0.39s, so this reproduces the original contest limit of 2s.
+  # Kept generous on purpose: a solution near the 40000-call cap pays about 0.4s
+  # in pipe round-trips that the original in-process grader did not.
+  time_multiplier: 5
+
+grading:
+  show_test_data_groups: true

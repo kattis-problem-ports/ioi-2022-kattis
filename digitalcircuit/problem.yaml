@@ -1,0 +1,20 @@
+uuid: 77119a59-26a6-418c-9a65-79fa9fd8040c
+author: Prabowo Djonatan
+source: International Olympiad in Informatics (IOI) 2022, Day 2
+source_url: https://ioi2022.id/tasks/
+license: cc by-sa
+type: scoring
+# The updates are revealed one at a time by output_validators/validator, so that
+# count_ways cannot look ahead -- the same reason the original was a CMS
+# Communication task. See include/cpp/grader.cpp.
+validation: custom interactive
+
+limits:
+  # Slowest AC is 0.42s, up from 0.20s before this became interactive: 10^5 pipe
+  # round-trips per case that the original in-process manager did not pay for.
+  # That gives a 2s limit, the original contest limit, and the intended-too-slow
+  # prabowo_no_segtree.cpp still stops at group5 there.
+  time_multiplier: 3
+
+grading:
+  show_test_data_groups: true

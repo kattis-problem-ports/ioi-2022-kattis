@@ -1,0 +1,15 @@
+uuid: 14c50edb-e47b-46dc-9d1c-94ecce038caf
+author: Félix Moreno Peñarrubia
+source: International Olympiad in Informatics (IOI) 2022, Day 2
+source_url: https://ioi2022.id/tasks/
+license: cc by-sa
+type: scoring
+validation: custom score
+
+limits:
+  # Slowest AC is 0.11s, so any multiplier up to 9 lands on Kattis' 1s floor,
+  # which is also the original contest limit.
+  time_multiplier: 3
+
+grading:
+  show_test_data_groups: true

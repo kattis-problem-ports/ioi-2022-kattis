@@ -1,0 +1,15 @@
+uuid: f22d259e-54fa-4dc0-98ea-bc3d26392af4
+author: Lim Rui Yuan
+source: International Olympiad in Informatics (IOI) 2022, Day 1
+source_url: https://ioi2022.id/tasks/
+license: cc by-sa
+type: scoring
+
+limits:
+  # Slowest AC is 0.15-0.48s depending on the machine. No submission fails on
+  # time near the boundary -- the intended-too-slow ones run out of memory
+  # instead -- so there is no strong signal and this is the default.
+  time_multiplier: 3
+
+grading:
+  show_test_data_groups: true

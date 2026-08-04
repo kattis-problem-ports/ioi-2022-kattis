@@ -1,0 +1,205 @@
+\problemname{Rarest Insects}
+
+\begin{quote}
+\textit{Note:} this problem is only solvable in C++.
+\end{quote}
+
+There are $N$ insects, indexed from $0$ to $N-1$, running around Pak Blangkon's house. Each insect has
+a type, which is an integer between $0$ and $10^9$ inclusive. Multiple insects may have the same type.
+
+Suppose insects are grouped by type. We define the \emph{cardinality of the most frequent insect type}
+as the number of insects in a group with the most number of insects. Similarly, the \emph{cardinality
+of the rarest insect type} is the number of insects in a group with the least number of insects.
+
+For example, suppose that there are $11$ insects, whose types are $[5, 7, 9, 11, 11, 5, 0, 11, 9, 100,
+9]$. In this case, the cardinality of the most frequent insect type is $3$. The groups with the most
+number of insects are type $9$ and type $11$, each consisting of $3$ insects. The cardinality of the
+rarest insect type is $1$. The groups with the least number of insects are type $7$, type $0$, and type
+$100$, each consisting of $1$ insect.
+
+Pak Blangkon does not know the type of any insect. He has a machine with a single button that can
+provide some information about the types of the insects. Initially, the machine is empty. To use the
+machine, three types of operations can be performed:
+\begin{enumerate}
+  \item Move an insect to inside the machine.
+  \item Move an insect to outside the machine.
+  \item Press the button on the machine.
+\end{enumerate}
+
+Each type of operation can be performed at most $40\,000$ times.
+
+Whenever the button is pressed, the machine reports the cardinality of the most frequent insect type,
+considering only insects inside the machine.
+
+Your task is to determine the cardinality of the rarest insect type among all $N$ insects in Pak
+Blangkon's house by using the machine. Additionally, in test group $3$ your score depends on the
+maximum number of calls of a given type that are performed; see the Scoring section for details.
+
+\section*{Implementation Details}
+You should implement the following procedure:
+
+\begin{verbatim}
+int min_cardinality(int N)
+\end{verbatim}
+
+\begin{itemize}
+  \item $N$: the number of insects.
+  \item This procedure should return the cardinality of the rarest insect type among all $N$ insects
+  in Pak Blangkon's house.
+  \item This procedure is called exactly once.
+\end{itemize}
+
+The above procedure can make calls to the following procedures:
+
+\begin{verbatim}
+void move_inside(int i)
+\end{verbatim}
+
+\begin{itemize}
+  \item $i$: the index of the insect to be moved inside the machine. The value of $i$ must be between
+  $0$ and $N-1$ inclusive.
+  \item If this insect is already inside the machine, the call has no effect on the set of insects in
+  the machine. However, it is still counted as a separate call.
+  \item This procedure can be called at most $40\,000$ times.
+\end{itemize}
+
+\begin{verbatim}
+void move_outside(int i)
+\end{verbatim}
+
+\begin{itemize}
+  \item $i$: the index of the insect to be moved outside the machine. The value of $i$ must be
+  between $0$ and $N-1$ inclusive.
+  \item If this insect is already outside the machine, the call has no effect on the set of insects in
+  the machine. However, it is still counted as a separate call.
+  \item This procedure can be called at most $40\,000$ times.
+\end{itemize}
+
+\begin{verbatim}
+int press_button()
+\end{verbatim}
+
+\begin{itemize}
+  \item This procedure returns the cardinality of the most frequent insect type, considering only
+  insects inside the machine.
+  \item This procedure can be called at most $40\,000$ times.
+\end{itemize}
+
+If you call one of the three procedures more often than that, pass an $i$ that is not between $0$ and
+$N-1$, or return an incorrect value from \texttt{min\_cardinality}, you will receive $0$ points for
+the test group.
+
+Your submission must not contain a \texttt{main} function, and must not read from standard input or
+write to standard output: a grader is compiled together with your submission and takes care of all
+communication with the machine. The declarations above live in \texttt{insects.h}, which is available
+both to your submission and as an attachment, so start your file with
+\texttt{\#include "insects.h"}.
+
+The judge is \textbf{not adaptive}. That is, the types of all $N$ insects are fixed before
+\texttt{min\_cardinality} is called.
+
+\section*{Constraints}
+\begin{itemize}
+  \item $2 \leq N \leq 2000$
+\end{itemize}
+
+\section*{Scoring}
+Your solution will be tested on a set of test groups.
+To earn points for a group, you must pass all test cases in that group.
+
+\noindent
+\begin{tabular}{| l | l | p{12cm} |}
+  \hline
+  \textbf{Group} & \textbf{Points} & \textbf{Constraints} \\ \hline
+  $1$ & $10$ & $N \leq 200$ \\ \hline
+  $2$ & $15$ & $N \leq 1000$ \\ \hline
+  $3$ & $75$ & No additional constraints. \\ \hline
+\end{tabular}
+
+\medskip
+\noindent
+Let $q$ be the maximum of the following three values: the number of calls to
+\texttt{move\_inside}, the number of calls to \texttt{move\_outside}, and the number of calls to
+\texttt{press\_button}.
+
+In group $3$ you can obtain a partial score. Let $m$ be the maximum value of $\frac{q}{N}$ across all
+test cases in that group. Your score for group $3$ is calculated according to the following table:
+
+\noindent
+\begin{tabular}{| l | l |}
+  \hline
+  \textbf{Condition} & \textbf{Points} \\ \hline
+  $20 < m$          & $0$ \\ \hline
+  $6 < m \leq 20$   & $\frac{225}{m-2}$ \\ \hline
+  $3 < m \leq 6$    & $81 - \frac{2}{3} m^2$ \\ \hline
+  $m \leq 3$        & $75$ \\ \hline
+\end{tabular}
+
+\medskip
+\noindent
+Points are rounded to two decimals.
+
+\section*{Sample Grader}
+A sample grader is available under ``attachments'' at the bottom of this page, together with
+\texttt{insects.h} and the sample input. Compile it with your solution and run it on an input file to
+try your solution locally. Let $T$ be an array of $N$ integers where $T[i]$ is the type of insect
+$i$. The sample grader reads the input in the following format:
+\begin{itemize}
+  \item line $1$: $N$
+  \item line $2$: $T[0]$ $T[1]$ $\ldots$ $T[N-1]$
+\end{itemize}
+
+If the sample grader detects that your solution breaks the rules, its output is
+\texttt{Protocol Violation: <MSG>}, where \texttt{<MSG>} is one of the following:
+\begin{itemize}
+  \item \texttt{invalid parameter}: in a call to \texttt{move\_inside} or \texttt{move\_outside}, the
+  value of $i$ is not between $0$ and $N-1$ inclusive.
+  \item \texttt{too many calls}: the number of calls to any of \texttt{move\_inside},
+  \texttt{move\_outside} or \texttt{press\_button} exceeds $40\,000$.
+\end{itemize}
+
+Otherwise, the output of the sample grader is in the following format:
+\begin{itemize}
+  \item line $1$: the return value of \texttt{min\_cardinality}
+  \item line $2$: $q$
+\end{itemize}
+
+The sample grader runs the machine inside your own process; the judge runs it as a separate program.
+The sample interaction below shows that exchange for the sample scenario: the numbers the judge sends
+back are the return values of \texttt{press\_button}.
+
+\section*{Explanation of Sample}
+The sample is a scenario in which there are $6$ insects of types $[5, 8, 9, 5, 9, 9]$ respectively.
+The procedure \texttt{min\_cardinality} is called with $N = 6$, and may call \texttt{move\_inside},
+\texttt{move\_outside} and \texttt{press\_button} as follows:
+
+\medskip
+\noindent
+\begin{tabular}{| l | l | l | l |}
+  \hline
+  \textbf{Call} & \textbf{Return value} & \textbf{Insects in the machine} &
+  \textbf{Types of insects in the machine} \\ \hline
+  & & $\{\}$ & $[\,]$ \\ \hline
+  \texttt{move\_inside(0)}  &     & $\{0\}$           & $[5]$ \\ \hline
+  \texttt{press\_button()}  & $1$ & $\{0\}$           & $[5]$ \\ \hline
+  \texttt{move\_inside(1)}  &     & $\{0, 1\}$        & $[5, 8]$ \\ \hline
+  \texttt{press\_button()}  & $1$ & $\{0, 1\}$        & $[5, 8]$ \\ \hline
+  \texttt{move\_inside(3)}  &     & $\{0, 1, 3\}$     & $[5, 8, 5]$ \\ \hline
+  \texttt{press\_button()}  & $2$ & $\{0, 1, 3\}$     & $[5, 8, 5]$ \\ \hline
+  \texttt{move\_inside(2)}  &     & $\{0, 1, 2, 3\}$  & $[5, 8, 9, 5]$ \\ \hline
+  \texttt{move\_inside(4)}  &     & $\{0, 1, 2, 3, 4\}$ & $[5, 8, 9, 5, 9]$ \\ \hline
+  \texttt{move\_inside(5)}  &     & $\{0, 1, 2, 3, 4, 5\}$ & $[5, 8, 9, 5, 9, 9]$ \\ \hline
+  \texttt{press\_button()}  & $3$ & $\{0, 1, 2, 3, 4, 5\}$ & $[5, 8, 9, 5, 9, 9]$ \\ \hline
+  \texttt{move\_inside(5)}  &     & $\{0, 1, 2, 3, 4, 5\}$ & $[5, 8, 9, 5, 9, 9]$ \\ \hline
+  \texttt{press\_button()}  & $3$ & $\{0, 1, 2, 3, 4, 5\}$ & $[5, 8, 9, 5, 9, 9]$ \\ \hline
+  \texttt{move\_outside(5)} &     & $\{0, 1, 2, 3, 4\}$ & $[5, 8, 9, 5, 9]$ \\ \hline
+  \texttt{press\_button()}  & $2$ & $\{0, 1, 2, 3, 4\}$ & $[5, 8, 9, 5, 9]$ \\ \hline
+\end{tabular}
+
+\medskip
+\noindent
+At this point, there is sufficient information to conclude that the cardinality of the rarest insect
+type is $1$. Therefore, \texttt{min\_cardinality} should return $1$.
+
+In this example, \texttt{move\_inside} is called $7$ times, \texttt{move\_outside} is called $1$ time
+and \texttt{press\_button} is called $6$ times.

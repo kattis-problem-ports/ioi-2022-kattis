@@ -1,0 +1,167 @@
+\problemname{Prisoner Challenge}
+
+\begin{quote}
+\textit{Note:} this problem is only solvable in C++.
+\end{quote}
+
+In a prison, there are $500$ prisoners. One day, the warden offers them a chance to free themselves.
+He places two bags with money, bag A and bag B, in a room. Each bag contains between $1$ and $N$
+coins, inclusive. The number of coins in bag A is different from the number of coins in bag B. The
+warden presents the prisoners with a challenge. The goal of the prisoners is to identify the bag with
+fewer coins.
+
+The room, in addition to the money bags, also contains a whiteboard. A single number must be written
+on the whiteboard at any time. Initially, the number on the whiteboard is $0$.
+
+Then, the warden asks the prisoners to enter the room, one by one. The prisoner who enters the room
+does not know which or how many other prisoners have entered the room before them. Every time a
+prisoner enters the room, they read the number currently written on the whiteboard. After reading the
+number, they must choose either bag A or bag B. The prisoner then inspects the chosen bag, thus getting
+to know the number of coins inside it. Then, the prisoner must perform either of the following two
+actions:
+\begin{itemize}
+  \item Overwrite the number on the whiteboard with a non-negative integer and leave the room. Note
+  that they can either change or keep the current number. The challenge continues after that (unless
+  all $500$ prisoners have already entered the room).
+  \item Identify one bag as the one that has fewer coins. This immediately ends the challenge.
+\end{itemize}
+
+The warden will not ask a prisoner who has left the room to enter the room again.
+
+The prisoners win the challenge if one of them correctly identifies the bag with fewer coins. They lose
+if any of them identifies the bag incorrectly, or all $500$ of them have entered the room and not
+attempted to identify the bag with fewer coins.
+
+Before the challenge starts, the prisoners gather in the prison hall and decide on a common strategy
+for the challenge in three steps.
+\begin{itemize}
+  \item They pick a non-negative integer $x$, which is the largest number they may ever want to write
+  on the whiteboard.
+  \item They decide, for any number $i$ written on the whiteboard ($0 \leq i \leq x$), which bag should
+  be inspected by a prisoner who reads number $i$ from the whiteboard upon entering the room.
+  \item They decide what action a prisoner in the room should perform after getting to know the number
+  of coins in the chosen bag. Specifically, for any number $i$ written on the whiteboard
+  ($0 \leq i \leq x$) and any number of coins $j$ seen in the inspected bag ($1 \leq j \leq N$), they
+  either decide
+  \begin{itemize}
+    \item what number between $0$ and $x$ (inclusive) should be written on the whiteboard, or
+    \item which bag should be identified as the one with fewer coins.
+  \end{itemize}
+\end{itemize}
+
+Upon winning the challenge, the warden will release the prisoners after serving $x$ more days.
+
+Your task is to devise a strategy for the prisoners that would ensure they win the challenge
+(regardless of the number of coins in bag A and bag B). The score of your solution depends on the
+value of $x$; see the Scoring section for details.
+
+\section*{Implementation Details}
+You should implement the following procedure:
+
+\begin{verbatim}
+std::vector<std::vector<int>> devise_strategy(int N)
+\end{verbatim}
+
+\begin{itemize}
+  \item $N$: the maximum possible number of coins in each bag.
+  \item This procedure should return an array $s$ of arrays of $N+1$ integers, representing your
+  strategy. The value of $x$ is the length of array $s$ minus one. For each $i$ such that
+  $0 \leq i \leq x$, the array $s[i]$ represents what a prisoner should do if they read number $i$
+  from the whiteboard upon entering the room:
+  \begin{enumerate}
+    \item The value of $s[i][0]$ is $0$ if the prisoner should inspect bag A, or $1$ if the prisoner
+    should inspect bag B.
+    \item Let $j$ be the number of coins seen in the chosen bag. The prisoner should then perform the
+    following action:
+    \begin{itemize}
+      \item If the value of $s[i][j]$ is $-1$, the prisoner should identify bag A as the one with
+      fewer coins.
+      \item If the value of $s[i][j]$ is $-2$, the prisoner should identify bag B as the one with
+      fewer coins.
+      \item If the value of $s[i][j]$ is a non-negative number, the prisoner should write that number
+      on the whiteboard. Note that $s[i][j]$ must be at most $x$.
+    \end{itemize}
+  \end{enumerate}
+  \item This procedure is called exactly once.
+\end{itemize}
+
+Your submission must not contain a \texttt{main} function, and must not read from standard input or
+write to standard output: a grader is compiled together with your submission and does that for you.
+The declaration above lives in \texttt{prison.h}, which is available both to your submission and as
+an attachment, so start your file with \texttt{\#include "prison.h"}.
+
+Any strategy that wins the challenge for every allowed pair of bag contents is accepted. Each test
+group puts its own upper bound on $x$, and no group allows $x$ to exceed $500$; see the Scoring
+section.
+
+\section*{Constraints}
+\begin{itemize}
+  \item $2 \leq N \leq 5000$
+\end{itemize}
+
+\section*{Scoring}
+Your solution will be tested on a set of test groups.
+To earn points for a group, you must pass all test cases in that group.
+
+\noindent
+\begin{tabular}{| l | l | p{12cm} |}
+  \hline
+  \textbf{Group} & \textbf{Points} & \textbf{Constraints} \\ \hline
+  $1$ & $5$  & $N \leq 500$, and the value of $x$ must not be more than $500$ \\ \hline
+  $2$ & $5$  & $N \leq 500$, and the value of $x$ must not be more than $70$ \\ \hline
+  $3$ & $90$ & The value of $x$ must not be more than $60$ \\ \hline
+\end{tabular}
+
+\medskip
+\noindent
+If in any of the test cases your strategy does not win the challenge, your score for that group is
+$0$.
+
+In group $3$ you can obtain a partial score. Let $m$ be the largest value of $x$ that you print over
+all test cases in that group. Your score for group $3$ is calculated according to the following table:
+
+\noindent
+\begin{tabular}{| l | l |}
+  \hline
+  \textbf{Condition} & \textbf{Points} \\ \hline
+  $40 \leq m \leq 60$    & $20$ \\ \hline
+  $26 \leq m \leq 39$    & $25 + 1.5 \times (40 - m)$ \\ \hline
+  $m = 25$               & $50$ \\ \hline
+  $m = 24$               & $55$ \\ \hline
+  $m = 23$               & $62$ \\ \hline
+  $m = 22$               & $70$ \\ \hline
+  $m = 21$               & $80$ \\ \hline
+  $m \leq 20$            & $90$ \\ \hline
+\end{tabular}
+
+\section*{Sample Grader}
+A sample grader is available under ``attachments'' at the bottom of this page, together with
+\texttt{prison.h} and the sample input. Compile it with your solution and run it on an input file to
+try your solution locally. It reads a single line containing $N$, and prints
+\begin{itemize}
+  \item line $1$: $x$
+  \item line $2 + i$ ($0 \leq i \leq x$): $s[i][0]$ $s[i][1]$ $\ldots$ $s[i][N]$
+\end{itemize}
+That is the format of the sample data below. The sample grader does not check whether your strategy
+wins the challenge; the judge does that.
+
+\section*{Explanation of Sample}
+The sample has $N = 3$. Let $v$ denote the number the prisoner reads from the whiteboard upon entering
+the room. One of the correct strategies is as follows:
+\begin{itemize}
+  \item If $v = 0$ (including the initial number), inspect bag A.
+  \begin{itemize}
+    \item If it contains $1$ coin, identify bag A as the one with fewer coins.
+    \item If it contains $3$ coins, identify bag B as the one with fewer coins.
+    \item If it contains $2$ coins, write $1$ on the whiteboard (overwriting $0$).
+  \end{itemize}
+  \item If $v = 1$, inspect bag B.
+  \begin{itemize}
+    \item If it contains $1$ coin, identify bag B as the one with fewer coins.
+    \item If it contains $3$ coins, identify bag A as the one with fewer coins.
+    \item If it contains $2$ coins, write $0$ on the whiteboard (overwriting $1$). Note that this case
+    can never happen, as we can conclude that both bags contain $2$ coins, which is not allowed.
+  \end{itemize}
+\end{itemize}
+
+This is the strategy printed in the sample output, and its value of $x$ is $1$.
