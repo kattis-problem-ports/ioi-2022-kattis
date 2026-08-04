@@ -1,0 +1,13 @@
+*.out
+*.pdf
+*.aux
+*.log
+*.dvi
+*.gch
+.vscode/
+__pycache__/
+.DS_Store
+.claude/
+!**/problem_statement/**/*.pdf
+reports/
+
